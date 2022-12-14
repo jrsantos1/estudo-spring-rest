@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ public class ProdutoController {
 	private ProdutoRepository produtoRepository;
 	
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
+	@CacheEvict(value = "listaDeProdutos", allEntries = true)
 	@Transactional
 	public @ResponseBody Produto salvarProduto(@Valid Produto produto)
 	{	
