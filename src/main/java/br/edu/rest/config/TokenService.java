@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import br.edu.rest.models.entities.Usuario;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -36,6 +37,24 @@ public class TokenService {
         .compact() 
         ;  // data de criação do token 
     }
+
+    public boolean isTokenValido(String token){
+
+        try {
+            Jwts.parser().setSigningKey(this.senha).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        
+        }
+    }
+
+    public Long getIdUsuario(String token){
+        var claims = Jwts.parser().setSigningKey(this.senha).parseClaimsJws(token);
+        System.out.println("Meu subject é: " + claims.getBody().getSubject());
+        return Long.parseLong(claims.getBody().getSubject());
+    }
+
 
 
 }
